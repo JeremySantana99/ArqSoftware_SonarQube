@@ -2,7 +2,6 @@
   <div id="app">
     <header>
       <nav>
-        <RouterLink to="/">Inicio</RouterLink> |
         <RouterLink to="/pacientes">Pacientes</RouterLink> |
         <RouterLink to="/LoginPaciente">Login</RouterLink>
       </nav>

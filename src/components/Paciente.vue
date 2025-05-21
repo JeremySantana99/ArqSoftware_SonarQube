@@ -10,7 +10,7 @@
       <input v-model="paciente.email" type="email" placeholder="Email" required />
       <input v-model="paciente.password" type="password" placeholder="Contraseña" required />
       <input v-model="paciente.telefono" placeholder="Teléfono" required />
-      <input v-model.number="paciente.edad" type="number" placeholder="Edad" required />
+      <input v-model.number="paciente.edad" type="number" placeholder="Edad" required /> 
       <select v-model="paciente.genero" required>
         <option disabled value="">Selecciona Género</option>
         <option>Masculino</option>
@@ -31,7 +31,7 @@
         <p><strong>Email:</strong> {{ item.email }}</p>
         <p><strong>Teléfono:</strong> {{ item.telefono }}</p>
         <p><strong>Edad:</strong> {{ item.edad }}</p>
-        <p><strong>Género:</strong> {{ item.genero }}</p>
+        <p><strong>Género:</strong> {{ item.genero }}</p>  
         <div class="card-buttons">
           <button @click="editarPaciente(index)">Editar</button>
           <button @click="eliminarPaciente(item.id, index)">Eliminar</button>
@@ -44,7 +44,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import {registrar,actualizar_datos,eliminar,obtenerPacientes} from '../services/PacienteService';
-import { Paciente } from '@/interfaces/IPaciente';
+import { Paciente } from '@/Interfaces/IPaciente';
 import '@/assets/main.css';
 
 export default defineComponent({
@@ -56,7 +56,7 @@ export default defineComponent({
       password: '',
       telefono: '',
       edad: 0,
-      genero: ''
+      genero: ''  
     });
 
     const listaPacientes = ref<Paciente[]>([]);
