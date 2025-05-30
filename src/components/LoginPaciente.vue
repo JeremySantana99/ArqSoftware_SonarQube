@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="top-bar">
-      <img src="@/assets/imagen1.JPG" class="logo" alt="Logo" />
+      <img src="@/assets/Imagen1.jpg" class="logo" alt="Logo" />
     </header>
 
     <h1 class="title">Login del Paciente</h1>
