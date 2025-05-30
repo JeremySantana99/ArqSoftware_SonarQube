@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <header>
-      <h1>Commit Google run</h1>
       <nav>
         <RouterLink to="/pacientes">Pacientes</RouterLink> |
         <RouterLink to="/LoginPaciente">Login</RouterLink>
