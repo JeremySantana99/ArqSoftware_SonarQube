@@ -10,16 +10,17 @@
       <input v-model="paciente.email" type="email" placeholder="Email" required />
       <input v-model="paciente.password" type="password" placeholder="Contraseña" required />
       <input v-model="paciente.telefono" placeholder="Teléfono" required />
-      <input v-model.number="paciente.edad" type="number" placeholder="Edad" required /> 
+      <input v-model.number="paciente.edad" type="number" placeholder="Edad" required />
       <select v-model="paciente.genero" required>
         <option disabled value="">Selecciona Género</option>
         <option>Masculino</option>
         <option>Femenino</option>
         <option>Otro</option>
       </select>
+      
 
       <div class="form-buttons">
-        <button type="submit">{{ modoEdicion ? 'Guardar' : 'Registrarse' }}</button>
+        <button type="submit">{{ modoEdicion ? 'Guardar' : 'Registrar' }}</button>
         <button type="button" @click="limpiarFormulario">Salir</button>
       </div>
     </form>
@@ -31,7 +32,7 @@
         <p><strong>Email:</strong> {{ item.email }}</p>
         <p><strong>Teléfono:</strong> {{ item.telefono }}</p>
         <p><strong>Edad:</strong> {{ item.edad }}</p>
-        <p><strong>Género:</strong> {{ item.genero }}</p>  
+        <p><strong>Género:</strong> {{ item.genero }}</p>
         <div class="card-buttons">
           <button @click="editarPaciente(index)">Editar</button>
           <button @click="eliminarPaciente(item.id, index)">Eliminar</button>
@@ -43,22 +44,15 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import {registrar,actualizar_datos,eliminar,obtenerPacientes} from '../services/PacienteService';
+import { registrar, actualizar_datos, eliminar, obtenerPacientes } from '../services/PacienteService';
 import { Paciente } from '@/Interfaces/IPaciente';
+import { PacienteFactory } from '@/Factory/PacienteFactory';
 import '@/assets/main.css';
 
 export default defineComponent({
   name: 'Paciente',
   setup() {
-    const paciente = ref<Paciente>({
-      nombres: '',
-      email: '',
-      password: '',
-      telefono: '',
-      edad: 0,
-      genero: ''  
-    });
-
+    const paciente = ref<Paciente>(PacienteFactory.crearPaciente());
     const listaPacientes = ref<Paciente[]>([]);
     const modoEdicion = ref(false);
     const indexEditando = ref<number | null>(null);
@@ -69,28 +63,30 @@ export default defineComponent({
     };
 
     const registrarPaciente = async () => {
-      if (modoEdicion.value && idEditando.value !== null) {
-        await actualizar_datos(idEditando.value, paciente.value);
-        listaPacientes.value[indexEditando.value!] = { ...paciente.value, id: idEditando.value };
-        modoEdicion.value = false;
-        idEditando.value = null;
-        indexEditando.value = null;
-      } else {
-        const id = await registrar(paciente.value);
-        listaPacientes.value.push({ ...paciente.value, id });
+      try {
+        if (modoEdicion.value && idEditando.value !== null) {
+          await actualizar_datos(idEditando.value, paciente.value);
+          listaPacientes.value[indexEditando.value!] = {
+            ...paciente.value,
+            id: idEditando.value
+          };
+        } else {
+          const pacienteSinId = { ...paciente.value };
+          delete pacienteSinId.id;
+
+          const id = await registrar(pacienteSinId);
+          listaPacientes.value.push({ ...pacienteSinId, id });
+        }
+        alert("Paciente registrado exitosamente");
+        limpiarFormulario();
+      } catch (error) {
+        console.error("Error en registrarPaciente:", error);
+        alert("Hubo un error al registrar el paciente.");
       }
-      limpiarFormulario();
     };
 
     const limpiarFormulario = () => {
-      paciente.value = {
-        nombres: '',
-        email: '',
-        password: '',
-        telefono: '',
-        edad: 0,
-        genero: ''
-      };
+      paciente.value = PacienteFactory.crearPaciente();
       modoEdicion.value = false;
       idEditando.value = null;
       indexEditando.value = null;
@@ -103,7 +99,7 @@ export default defineComponent({
 
     const editarPaciente = (index: number) => {
       const pacienteSeleccionado = listaPacientes.value[index];
-      paciente.value = { ...pacienteSeleccionado };
+      paciente.value = PacienteFactory.crearPaciente(pacienteSeleccionado);
       modoEdicion.value = true;
       idEditando.value = pacienteSeleccionado.id!;
       indexEditando.value = index;
@@ -125,4 +121,3 @@ export default defineComponent({
   }
 });
 </script>
-

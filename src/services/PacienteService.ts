@@ -1,6 +1,7 @@
-import { Paciente } from "@/Interfaces/IPaciente";
+// src/services/paciente.service.ts
+import type { Paciente } from "@/Interfaces/IPaciente";
 import { db } from "./firebase";
-import {collection,addDoc,doc,updateDoc,deleteDoc,getDocs} from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, deleteDoc, getDocs } from "firebase/firestore";
 
 const pacientesCollection = collection(db, "pacientes");
 
