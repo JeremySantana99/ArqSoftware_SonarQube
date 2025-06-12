@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1> prueba de despliegue</h1>
     <header>
       <nav>
         <RouterLink to="/pacientes">Pacientes</RouterLink> |
